@@ -40,7 +40,7 @@ def make_text(chains):
     """Takes a dictionary of markov chains and returns random text
     based off an original text."""
 
-
+# DID THIS GET CHECKED IN????
     #assign key_list to key/tuple group
     keys_list = chains.keys()
 
