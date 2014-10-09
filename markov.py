@@ -4,7 +4,7 @@ import sys
 import random
 import string
 
-def make_chains(corpus1,corpus2,n):
+def make_chains(corpus1, corpus2, n):
     """Takes an input text as a string and returns a dictionary of
     markov chains."""
     chains = {}
@@ -14,17 +14,23 @@ def make_chains(corpus1,corpus2,n):
     input_text2 = corpus2.read() # another long string
 
     mashup = input_text1 + input_text2
+    #remove punctuation except . , ' ? 
+    punctuation = """!#$%&\()*+-/:;<=>@[\\]^_{|}~"""
+    for i in punctuation:
+        if i in mashup:
+            clean_text = mashup.replace(i, "")
 
-    clean_text = mashup.replace("--"," ").replace("_"," ")      
+
     word_list = clean_text.split() # store corpus in one long string
 
-    #Loop through giant list and assign keys and values to empty dict
+    #Loop through giant list and assign keys to empty dict
     for i in range(len(word_list)-n):
         key_tuple = []
         for j in range(n):
             key_tuple.append(word_list[i+j])
 
         key = tuple(key_tuple)
+        #assign value from key
         value = word_list[i+n]
         
         #add values to multiple occurances of pair word keys
@@ -33,7 +39,8 @@ def make_chains(corpus1,corpus2,n):
         else:                       # If word pair is in dictionary (append to value list)
             chains[key].append(value)
 
-    # print chains, dict of keys as strings in tuple and values as list of strings
+    # get chains, a dict of keys as strings in tuple and values as list of strings
+    # print chains
     return chains
 
 def make_text(chains):
@@ -46,7 +53,7 @@ def make_text(chains):
     # Test random keys until a value with capital letter is found
     not_found = True    
     while not_found:
-        option = random.choice(keys_list)       # randomly selects a key from dictionary (key is a tuple)
+        option = random.choice(keys_list)# randomly selects a key from dictionary (key is a tuple)
        
         if chains[option][0][0] in string.ascii_uppercase:
             seed_key = option #tuple
@@ -55,8 +62,11 @@ def make_text(chains):
     
     sentence = ""
 
-    while new_word[-1] not in ".?!":
+    # while new_word[-1] not in ".?!":
 
+    while len(sentence) < 540:
+
+          
         # Get new word (value of key)
         new_word = chains[seed_key] # values list
         # chooses value from value list if there is more than one option
@@ -64,14 +74,15 @@ def make_text(chains):
         #update sentence string
         sentence = sentence + " " + new_word
 
+        #update seed key from old seed_key value
         new_key = []
- 
         new_key = list(seed_key[1:])
         new_key.append(new_word)
+        seed_key = tuple(new_key) #make list a tuple 
+        
+            
 
-        seed_key = tuple(new_key) 
-
-    return sentence
+    return sentence 
 
 def main():
     args = sys.argv
@@ -82,9 +93,9 @@ def main():
     corpus1 = open(input_file1)
     corpus2 = open(input_file2)
 
-    chain_dict = make_chains(corpus1,corpus2, n)
+    chain_dict = make_chains(corpus1, corpus2, n)
     random_text = make_text(chain_dict)
     print random_text
-
+#random comment to see if pushing works
 if __name__ == "__main__":
     main()
