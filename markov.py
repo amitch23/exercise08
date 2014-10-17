@@ -64,8 +64,6 @@ def make_text(chains):
     
     sentence = ""
 
-    # while new_word[-1] not in ".?!":
-
     while len(sentence) <= 136:
 
           
@@ -97,11 +95,6 @@ def post_to_twitter(tweet):
                        consumer_secret = os.environ.get("TWITTER_CONSUMER_KEY"),
                        access_token_key = os.environ.get("TWITTER_ACCESS_TOKEN_KEY"),
                        access_token_secret= os.environ.get("TWITTER_ACCESS_TOKEN_SECRET"))
-
-    # api = twitter.Api(consumer_key=os.environ.get("TWITTER_CONSUMER_KEY",
-    #     consumer_secret='TWITTER_CONSUMER_SECRET',
-    #     access_token_key='TWITTER_ACCESS_TOKEN_KEY',
-    #     access_token_secret='TWITTER_ACCESS_TOKEN_SECRET')
 
     print tweet
     post = raw_input("Do you want to post this to twitter? -->  y/n ")
