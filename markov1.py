@@ -70,7 +70,7 @@ def make_text(chains):
         # chooses value from value list if there is more than one option
         new_word = new_word[random.randrange(len(new_word))] 
         #update sentence string
-        sentence = sentence + " " + new_word + "."
+        sentence = sentence + " " + new_word 
 
         #update seed key from old seed_key value
         new_key = []
@@ -79,6 +79,7 @@ def make_text(chains):
         seed_key = tuple(new_key) #make list a tuple 
         
             
+    sentence = sentence + "."
 
     return sentence 
 
@@ -90,7 +91,7 @@ def main():
     # Change this to read input_text from a file
     corpus = open(input_file)
 
-    chain_dict = make_chains(corpus1, n)
+    chain_dict = make_chains(corpus, n)
     random_text = make_text(chain_dict)
     print random_text
 #random comment to see if pushing works

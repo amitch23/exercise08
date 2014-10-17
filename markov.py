@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
-import sys
+import os, sys
 import random
 import string
+import twitter
+
 
 def make_chains(corpus1, corpus2, n):
     """Takes an input text as a string and returns a dictionary of
@@ -64,25 +66,49 @@ def make_text(chains):
 
     # while new_word[-1] not in ".?!":
 
-    while len(sentence) < 540:
+    while len(sentence) <= 136:
 
           
         # Get new word (value of key)
-        new_word = chains[seed_key] # values list
-        # chooses value from value list if there is more than one option
+        new_word = chains[seed_key] 
+
+        # Randomly choose value from value list if there is more than one option
         new_word = new_word[random.randrange(len(new_word))] 
-        #update sentence string
+
+        #update sentence with current word
         sentence = sentence + " " + new_word
 
         #update seed key from old seed_key value
         new_key = []
         new_key = list(seed_key[1:])
         new_key.append(new_word)
-        seed_key = tuple(new_key) #make list a tuple 
+        seed_key = tuple(new_key) 
         
-            
 
-    return sentence 
+    return sentence + "."
+
+def post_to_twitter(tweet):
+    print os.environ
+    if os.environ.get("TWITTER_API_KEY", None) == None:
+        print "You need twitter access keys in your shell environment to post to twitter."
+        sys.exit()
+
+    api = twitter.Api(consumer_key = os.environ.get("TWITTER_API_KEY"),
+                       consumer_secret = os.environ.get("TWITTER_CONSUMER_KEY"),
+                       access_token_key = os.environ.get("TWITTER_ACCESS_TOKEN_KEY"),
+                       access_token_secret= os.environ.get("TWITTER_ACCESS_TOKEN_SECRET"))
+
+    # api = twitter.Api(consumer_key=os.environ.get("TWITTER_CONSUMER_KEY",
+    #     consumer_secret='TWITTER_CONSUMER_SECRET',
+    #     access_token_key='TWITTER_ACCESS_TOKEN_KEY',
+    #     access_token_secret='TWITTER_ACCESS_TOKEN_SECRET')
+
+    print tweet
+    post = raw_input("Do you want to post this to twitter? -->  y/n ")
+
+    if "y" in post:
+        return api.PostUpdate(tweet)
+
 
 def main():
     args = sys.argv
@@ -95,7 +121,7 @@ def main():
 
     chain_dict = make_chains(corpus1, corpus2, n)
     random_text = make_text(chain_dict)
-    print random_text
-#random comment to see if pushing works
+    post_to_twitter(random_text)
+
 if __name__ == "__main__":
     main()
